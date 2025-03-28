@@ -60,7 +60,6 @@ export default function Home() {
   return (
     <>
       <Header />
-
       <div className="container bg-red-50 mx-auto p-4">
         <div className="text-center text-green-700 font-semibold py-2">
           {alert}

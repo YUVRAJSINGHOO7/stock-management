@@ -86,8 +86,6 @@ export default function Home() {
             <option value="Category 2">Category 2</option>
           </select>
         </div>
-
-        {/* Loading Spinner */}
         {loading && (
           <div className="flex justify-center">
             <svg
@@ -112,8 +110,6 @@ export default function Home() {
             </svg>
           </div>
         )}
-
-        {/* Search Results */}
         <div className="mt-4 space-y-3">
           {dropDown.map((item) => (
             <div

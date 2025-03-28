@@ -1,0 +1,33 @@
+cluster = stock
+//database = stock-management
+//collection = inventory
+yuvrajsinghk91
+fr2HJZuwCg1grD1s
+
+
+
+// TO ADD SEARCH FUNCTIONALITY
+// to create the indexes on mongodb database
+db.collection.createIndex({slug: "text", quantity: "text", price: "text"}) // here collection name is inventory
+
+
+// the following aggregate pipline is to search the full-text not partially
+db.inventory.aggregate([
+  {
+    $match: { $text: { $search: "12" } },
+  },
+]);
+
+
+// for partially and multiple fields
+db.inventory.aggregate([
+  {
+    $match: {
+      $or: [
+        { slug: { $regex: "je", $options: "i" } },
+        { quantity: { $regex: "12", $options: "i" } },
+        { price: { $regex: "12", $options: "i" } },
+      ],
+    },
+  },
+]);

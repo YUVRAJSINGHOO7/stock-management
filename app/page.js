@@ -71,9 +71,6 @@ export default function Home() {
 
         <div className="mb-6 p-5 bg-white shadow-lg rounded-lg flex gap-4">
           <input
-            onBlur={() => {
-              setDropDown([]);
-            }}
             onChange={onDropdownEdit}
             type="text"
             placeholder="Search product..."
@@ -112,13 +109,22 @@ export default function Home() {
         <div className="mt-4 space-y-3">
           {dropDown.map((item) => (
             <div
-              key={item.slug}
-              className="flex justify-between items-center bg-blue-100 hover:bg-blue-200 text-gray-800 p-3 rounded-lg shadow-md transition duration-200"
-            >
-              <span className="font-medium">{item.slug}</span>
-              <span className="font-semibold">{item.quantity}</span>
-              <span className="font-bold">₹{item.price}</span>
+            key={item.slug}
+            className="flex items-center justify-between bg-blue-50 hover:bg-blue-100 text-gray-800 p-4 rounded-lg shadow-md transition-all duration-200 border border-blue-200"
+          >
+            <span className="font-semibold flex-1">
+              {item.slug} ({item.quantity} available for ₹{item.price})
+            </span>
+            <div className="flex items-center gap-4">
+              <button className="add bg-green-500 hover:bg-green-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer">
+                +
+              </button>
+              <span className="font-semibold text-lg">{item.quantity}</span>
+              <button className="sub bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer">
+                -
+              </button>
             </div>
+          </div>          
           ))}
         </div>
 
@@ -172,7 +178,7 @@ export default function Home() {
           <button
             onClick={addProduct}
             type="submit"
-            className="bg-green-500 text-white px-3 py-1 rounded"
+            className="bg-green-500 text-white px-3 py-1 rounded cursor-pointer"
           >
             Add Product
           </button>

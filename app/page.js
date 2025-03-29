@@ -8,6 +8,7 @@ export default function Home() {
   const [alert, setAlert] = useState("");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingaction, setLoadingaction] = useState(false)
   const [dropDown, setDropDown] = useState([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -17,6 +18,11 @@ export default function Home() {
     };
     fetchProducts();
   }, []);
+
+  const buttonAction = async (action, slug) => {
+    console.log(action)
+    setLoadingaction(true)
+  };
 
   const addProduct = async (e) => {
     e.preventDefault();
@@ -109,22 +115,30 @@ export default function Home() {
         <div className="mt-4 space-y-3">
           {dropDown.map((item) => (
             <div
-            key={item.slug}
-            className="flex items-center justify-between bg-blue-50 hover:bg-blue-100 text-gray-800 p-4 rounded-lg shadow-md transition-all duration-200 border border-blue-200"
-          >
-            <span className="font-semibold flex-1">
-              {item.slug} ({item.quantity} available for ₹{item.price})
-            </span>
-            <div className="flex items-center gap-4">
-              <button className="add bg-green-500 hover:bg-green-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer">
-                +
-              </button>
-              <span className="font-semibold text-lg">{item.quantity}</span>
-              <button className="sub bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer">
-                -
-              </button>
+              key={item.slug}
+              className="flex items-center justify-between bg-blue-50 hover:bg-blue-100 text-gray-800 p-4 rounded-lg shadow-md transition-all duration-200 border border-blue-200"
+            >
+              <span className="font-semibold flex-1">
+                {item.slug} ({item.quantity} available for ₹{item.price})
+              </span>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => buttonAction("add", item.slug)}
+                  disabled={loadingaction}
+                  className="add bg-green-500 hover:bg-green-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer disabled:bg-purple-200"
+                >
+                  +
+                </button>
+                <span className="font-semibold text-lg">{item.quantity}</span>
+                <button
+                  onClick={() => buttonAction("minus", item.slug)}
+                  disabled={loadingaction}
+                  className="sub bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer disabled:bg-purple-200"
+                >
+                  -
+                </button>
+              </div>
             </div>
-          </div>          
           ))}
         </div>
 

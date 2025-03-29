@@ -8,7 +8,7 @@ export default function Home() {
   const [alert, setAlert] = useState("");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
-  const [loadingaction, setLoadingaction] = useState(false)
+  const [loadingaction, setLoadingaction] = useState(false);
   const [dropDown, setDropDown] = useState([]);
   useEffect(() => {
     const fetchProducts = async () => {
@@ -19,9 +19,19 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  const buttonAction = async (action, slug) => {
-    console.log(action)
-    setLoadingaction(true)
+  const buttonAction = async (action, slug, initialQuantity) => {
+    console.log(action);
+    setLoadingaction(true);
+    const response = await fetch("/api/action", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ action, slug, initialQuantity }),
+    });
+    const data = await response.json();
+    console.log("Server Response:", data);
+    setLoadingaction(false);
   };
 
   const addProduct = async (e) => {
@@ -52,15 +62,18 @@ export default function Home() {
     setProductForm({ ...productForm, [e.target.name]: e.target.value });
   };
   const onDropdownEdit = async (e) => {
-    setQuery(e.target.value);
+    let value = e.target.value;
+    setQuery(value);
 
-    if (!loading) {
+    if (value.length >= 3) {
       setLoading(true);
       setDropDown([]);
       const response = await fetch("/api/search?query=" + query);
       let rjson = await response.json();
       setDropDown(rjson.products);
       setLoading(false);
+    } else {
+      setDropDown([]);
     }
   };
   return (
@@ -123,7 +136,7 @@ export default function Home() {
               </span>
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => buttonAction("add", item.slug)}
+                  onClick={() => buttonAction("plus", item.slug, item.quantity)}
                   disabled={loadingaction}
                   className="add bg-green-500 hover:bg-green-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer disabled:bg-purple-200"
                 >
@@ -131,7 +144,9 @@ export default function Home() {
                 </button>
                 <span className="font-semibold text-lg">{item.quantity}</span>
                 <button
-                  onClick={() => buttonAction("minus", item.slug)}
+                  onClick={() =>
+                    buttonAction("minus", item.slug, item.quantity)
+                  }
                   disabled={loadingaction}
                   className="sub bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-1 rounded-md transition duration-200 cursor-pointer disabled:bg-purple-200"
                 >
@@ -205,7 +220,6 @@ export default function Home() {
               <th className="border px-4 py-2">Product Name</th>
               <th className="border px-4 py-2">Quantity</th>
               <th className="border px-4 py-2">Price</th>
-              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -215,14 +229,6 @@ export default function Home() {
                   <td className="border px-4 py-2">{items.slug}</td>
                   <td className="border px-4 py-2">{items.quantity}</td>
                   <td className="border px-4 py-2">₹{items.price}</td>
-                  <td className="border px-4 py-2">
-                    <button className="bg-blue-500 text-white px-3 py-1 rounded">
-                      Edit
-                    </button>
-                    <button className="bg-red-500 text-white px-3 py-1 rounded ml-2">
-                      Delete
-                    </button>
-                  </td>
                 </tr>
               );
             })}

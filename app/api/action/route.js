@@ -6,7 +6,7 @@ export async function POST(request) {
   console.log(action, slug, initialQuantity);
 
   const uri =
-    "mongodb+srv://YuvrajSingh:r9ulZ8YUX5fjk9Hy@stock.ee6nd.mongodb.net/";
+    "mongodb+srv://Yuvraj--SinghStock:Ktks8f93InNhLG6BwwcNpH@cluster0.djkqg.mongodb.net/";
   const client = new MongoClient(uri);
 
   try {
